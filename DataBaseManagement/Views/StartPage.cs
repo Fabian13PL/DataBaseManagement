@@ -1,6 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
+using System.Runtime.Remoting.Contexts;
 using System.Windows.Forms;
+using System.Xml.Linq;
 
 namespace DataBaseManagement.Views
 {
@@ -18,14 +22,29 @@ namespace DataBaseManagement.Views
 
         private void StartPage_Load(object sender, EventArgs e)
         {
-            using (var context = new DatabaseContext())
+            using (SqlConnection connection = new SqlConnection($"Data Source=localhost;Initial Catalog=master;Integrated Security=True"))
             {
-                var databaseList = context.Database.SqlQuery<string>("SELECT name FROM master.sys.databases WHERE name NOT IN ('master', 'tempdb', 'model', 'msdb')").ToList();
-
-                foreach (var databaseName in databaseList)
+                connection.Open();
+                string sql = $"SELECT name FROM master.sys.databases WHERE name NOT IN ('master', 'tempdb', 'model', 'msdb')";
+                using (SqlCommand command = new SqlCommand(sql, connection))
                 {
-                    DataBaseList.Items.Add(databaseName);
+                    List<string> databaseList = new List<string>();
+
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            string databaseName = reader["name"].ToString();
+                            databaseList.Add(databaseName);
+                        }
+                    }
+
+                    foreach (var databaseName in databaseList)
+                    {
+                        DataBaseList.Items.Add(databaseName);
+                    }
                 }
+                connection.Close();
             }
         }
 
