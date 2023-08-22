@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.IO;
 using System.Linq;
+using System.Data.SqlClient;
+using System.Xml.Linq;
 
 namespace DataBaseManagement
 {
@@ -98,9 +100,9 @@ namespace DataBaseManagement
             this.Entry(row).State = EntityState.Deleted;
             this.SaveChanges();
         }
-        public void CreateTable(string tableName, List<string> columnNames, List<string> dataTypes)
+        public void CreateTable(string tableName, List<string> columnNames, List<string> dataTypes, string databaseName)
         {
-            string sql = $"CREATE TABLE {tableName} (";
+            string sql = $"USE {databaseName} CREATE TABLE {tableName} (";
 
             for (int i = 0; i < columnNames.Count; i++)
             {
@@ -114,7 +116,16 @@ namespace DataBaseManagement
 
             sql += ")";
 
-            this.Database.ExecuteSqlCommand(sql);
+            //this.Database.ExecuteSqlCommand(sql);
+            using (SqlConnection connection = new SqlConnection($"Data Source=localhost;Initial Catalog=master;Integrated Security=True"))
+            {
+                connection.Open();
+                using (SqlCommand command = new SqlCommand(sql, connection))
+                {
+                    command.ExecuteNonQuery();
+                }
+                connection.Close();
+            }
 
             Table table = new Table
             {

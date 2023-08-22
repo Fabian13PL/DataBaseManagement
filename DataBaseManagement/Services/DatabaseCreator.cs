@@ -17,6 +17,7 @@ namespace DataBaseManagement
                 {
                     command.ExecuteNonQuery();
                 }
+                connection.Close();
             }
 
             string databaseConnectionString = $"Data Source={serverName};Initial Catalog={name};Integrated Security=True";

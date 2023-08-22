@@ -46,12 +46,16 @@
             // 
             // DataBaseList
             // 
+            this.DataBaseList.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.DataBaseList.FormattingEnabled = true;
+            this.DataBaseList.ImeMode = System.Windows.Forms.ImeMode.NoControl;
             this.DataBaseList.Location = new System.Drawing.Point(68, 83);
             this.DataBaseList.Name = "DataBaseList";
             this.DataBaseList.Size = new System.Drawing.Size(329, 24);
             this.DataBaseList.TabIndex = 1;
             this.DataBaseList.SelectedIndexChanged += new System.EventHandler(this.DataBaseList_SelectedIndexChanged);
+            this.DataBaseList.SelectedValueChanged += new System.EventHandler(this.DataBaseList_SelectedValueChanged);
+            this.DataBaseList.MouseClick += new System.Windows.Forms.MouseEventHandler(this.DataBaseList_MouseClick);
             // 
             // ButtonSelectDataBase
             // 
@@ -61,6 +65,7 @@
             this.ButtonSelectDataBase.TabIndex = 2;
             this.ButtonSelectDataBase.Text = "Wybierz bazę danych";
             this.ButtonSelectDataBase.UseVisualStyleBackColor = true;
+            this.ButtonSelectDataBase.Click += new System.EventHandler(this.ButtonSelectDataBase_Click);
             // 
             // ButtonExit
             // 
