@@ -86,6 +86,12 @@
     <Compile Include="Views\AddTableDialog.Designer.cs">
       <DependentUpon>AddTableDialog.cs</DependentUpon>
     </Compile>
+    <Compile Include="Views\EditColumnsDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Views\EditColumnsDialog.Designer.cs">
+      <DependentUpon>EditColumnsDialog.cs</DependentUpon>
+    </Compile>
     <Compile Include="Views\ManageTablesDialog.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -112,6 +118,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Views\AddTableDialog.resx">
       <DependentUpon>AddTableDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\EditColumnsDialog.resx">
+      <DependentUpon>EditColumnsDialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Views\ManageTablesDialog.resx">
       <DependentUpon>ManageTablesDialog.cs</DependentUpon>

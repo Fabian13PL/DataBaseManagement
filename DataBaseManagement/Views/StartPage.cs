@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Runtime.Remoting.Contexts;
@@ -72,8 +73,12 @@ namespace DataBaseManagement.Views
 
         private void ButtonSelectDataBase_Click(object sender, EventArgs e)
         {
-            ManageTablesDialog manageTablesDialogForm = new ManageTablesDialog(DataBaseList.Text.ToString());
-            manageTablesDialogForm.ShowDialog();
+            string SelectedDatabase = DataBaseList.Text.Trim();
+            if (!string.IsNullOrWhiteSpace(SelectedDatabase))
+            {
+                ManageTablesDialog manageTablesDialogForm = new ManageTablesDialog(DataBaseList.Text.ToString());
+                manageTablesDialogForm.ShowDialog();
+            }
         }
         
         private void DataBaseList_SelectedValueChanged(object sender, EventArgs e)

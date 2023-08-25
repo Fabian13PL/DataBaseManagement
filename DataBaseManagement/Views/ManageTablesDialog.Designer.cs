@@ -32,6 +32,7 @@
             this.dataGridView = new System.Windows.Forms.DataGridView();
             this.SelectActionButton = new System.Windows.Forms.Button();
             this.SelectActionComboBox = new System.Windows.Forms.ComboBox();
+            this.SelectTableLabel = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).BeginInit();
             this.SuspendLayout();
             // 
@@ -39,7 +40,7 @@
             // 
             this.comboBoxTableNames.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxTableNames.FormattingEnabled = true;
-            this.comboBoxTableNames.Location = new System.Drawing.Point(12, 12);
+            this.comboBoxTableNames.Location = new System.Drawing.Point(115, 12);
             this.comboBoxTableNames.Name = "comboBoxTableNames";
             this.comboBoxTableNames.Size = new System.Drawing.Size(185, 24);
             this.comboBoxTableNames.TabIndex = 0;
@@ -51,12 +52,12 @@
             this.dataGridView.AllowUserToAddRows = false;
             this.dataGridView.AllowUserToDeleteRows = false;
             this.dataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView.Location = new System.Drawing.Point(12, 188);
+            this.dataGridView.Location = new System.Drawing.Point(12, 65);
             this.dataGridView.Name = "dataGridView";
             this.dataGridView.ReadOnly = true;
             this.dataGridView.RowHeadersWidth = 51;
             this.dataGridView.RowTemplate.Height = 24;
-            this.dataGridView.Size = new System.Drawing.Size(1058, 347);
+            this.dataGridView.Size = new System.Drawing.Size(1058, 470);
             this.dataGridView.TabIndex = 1;
             // 
             // SelectActionButton
@@ -85,11 +86,21 @@
             this.SelectActionComboBox.Size = new System.Drawing.Size(263, 24);
             this.SelectActionComboBox.TabIndex = 3;
             // 
+            // SelectTableLabel
+            // 
+            this.SelectTableLabel.AutoSize = true;
+            this.SelectTableLabel.Location = new System.Drawing.Point(12, 20);
+            this.SelectTableLabel.Name = "SelectTableLabel";
+            this.SelectTableLabel.Size = new System.Drawing.Size(97, 16);
+            this.SelectTableLabel.TabIndex = 4;
+            this.SelectTableLabel.Text = "Wybierz tabelę";
+            // 
             // ManageTablesDialog
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1082, 547);
+            this.Controls.Add(this.SelectTableLabel);
             this.Controls.Add(this.SelectActionComboBox);
             this.Controls.Add(this.SelectActionButton);
             this.Controls.Add(this.dataGridView);
@@ -99,6 +110,7 @@
             this.Load += new System.EventHandler(this.ManageTablesDialog_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).EndInit();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -108,5 +120,6 @@
         private System.Windows.Forms.DataGridView dataGridView;
         private System.Windows.Forms.Button SelectActionButton;
         private System.Windows.Forms.ComboBox SelectActionComboBox;
+        private System.Windows.Forms.Label SelectTableLabel;
     }
 }

@@ -40,6 +40,9 @@
             this.ColumnNameLabel = new System.Windows.Forms.Label();
             this.TypeLabel = new System.Windows.Forms.Label();
             this.ListOfColumnsLabel = new System.Windows.Forms.Label();
+            this.NotNullCheckBox = new System.Windows.Forms.CheckBox();
+            this.PrimaryKeyCheckBox = new System.Windows.Forms.CheckBox();
+            this.UniqueCheckBox = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // ColumnNameTextBox
@@ -111,9 +114,9 @@
             // 
             // AddColumnButton
             // 
-            this.AddColumnButton.Location = new System.Drawing.Point(308, 41);
+            this.AddColumnButton.Location = new System.Drawing.Point(435, 41);
             this.AddColumnButton.Name = "AddColumnButton";
-            this.AddColumnButton.Size = new System.Drawing.Size(111, 23);
+            this.AddColumnButton.Size = new System.Drawing.Size(131, 23);
             this.AddColumnButton.TabIndex = 4;
             this.AddColumnButton.Text = "Dodaj kolumnę";
             this.AddColumnButton.UseVisualStyleBackColor = true;
@@ -185,11 +188,46 @@
             this.ListOfColumnsLabel.TabIndex = 11;
             this.ListOfColumnsLabel.Text = "Dodane kolumny";
             // 
+            // NotNullCheckBox
+            // 
+            this.NotNullCheckBox.AutoSize = true;
+            this.NotNullCheckBox.Location = new System.Drawing.Point(309, 43);
+            this.NotNullCheckBox.Name = "NotNullCheckBox";
+            this.NotNullCheckBox.Size = new System.Drawing.Size(76, 20);
+            this.NotNullCheckBox.TabIndex = 12;
+            this.NotNullCheckBox.Text = "Not Null";
+            this.NotNullCheckBox.UseVisualStyleBackColor = true;
+            // 
+            // PrimaryKeyCheckBox
+            // 
+            this.PrimaryKeyCheckBox.AutoSize = true;
+            this.PrimaryKeyCheckBox.Location = new System.Drawing.Point(309, 70);
+            this.PrimaryKeyCheckBox.Name = "PrimaryKeyCheckBox";
+            this.PrimaryKeyCheckBox.Size = new System.Drawing.Size(101, 20);
+            this.PrimaryKeyCheckBox.TabIndex = 13;
+            this.PrimaryKeyCheckBox.Text = "Primary Key";
+            this.PrimaryKeyCheckBox.UseVisualStyleBackColor = true;
+            this.PrimaryKeyCheckBox.CheckedChanged += new System.EventHandler(this.PrimaryKeyCheckBox_CheckedChanged);
+            // 
+            // UniqueCheckBox
+            // 
+            this.UniqueCheckBox.AutoSize = true;
+            this.UniqueCheckBox.Location = new System.Drawing.Point(309, 17);
+            this.UniqueCheckBox.Name = "UniqueCheckBox";
+            this.UniqueCheckBox.Size = new System.Drawing.Size(72, 20);
+            this.UniqueCheckBox.TabIndex = 14;
+            this.UniqueCheckBox.Text = "Unique";
+            this.UniqueCheckBox.UseVisualStyleBackColor = true;
+            this.UniqueCheckBox.CheckedChanged += new System.EventHandler(this.UniqueCheckBox_CheckedChanged);
+            // 
             // AddTableDialog
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(579, 141);
+            this.Controls.Add(this.UniqueCheckBox);
+            this.Controls.Add(this.PrimaryKeyCheckBox);
+            this.Controls.Add(this.NotNullCheckBox);
             this.Controls.Add(this.ListOfColumnsLabel);
             this.Controls.Add(this.TypeLabel);
             this.Controls.Add(this.ColumnNameLabel);
@@ -224,5 +262,8 @@
         private System.Windows.Forms.Label ColumnNameLabel;
         private System.Windows.Forms.Label TypeLabel;
         private System.Windows.Forms.Label ListOfColumnsLabel;
+        private System.Windows.Forms.CheckBox NotNullCheckBox;
+        private System.Windows.Forms.CheckBox PrimaryKeyCheckBox;
+        private System.Windows.Forms.CheckBox UniqueCheckBox;
     }
 }

@@ -102,11 +102,14 @@ namespace DataBaseManagement.Views
                                 string tableName = addTableDialog.TableName;
                                 List<string> columnNames = addTableDialog.ColumnNames;
                                 List<string> dataTypes = addTableDialog.DataTypes;
+                                List<bool> IsNotNullConstraints = addTableDialog.IsNotNullConstraints;
+                                List<bool> IsPrimaryKeyColumns = addTableDialog.IsPrimaryKeyColumns;
+                                List<bool> IsUniqueColumns = addTableDialog.IsUniqueColumns;
 
                                 using (DatabaseContext contextC0 = new DatabaseContext())
                                 {
-                                    contextC0.CreateTable(tableName, columnNames, dataTypes, databaseList);
-                                    // Aktualizuj ComboBox lub wykonaj inne niezbędne działania
+                                    contextC0.CreateTable(databaseList, tableName, columnNames, dataTypes, IsNotNullConstraints, IsPrimaryKeyColumns, IsUniqueColumns);
+                                    RefreshComboBoxTableNames();
                                 }
                             }
                         }
@@ -117,11 +120,33 @@ namespace DataBaseManagement.Views
                         {
                             context.Tables.Remove(tableToDelete);
                             context.SaveChanges();
-                            // Update the ComboBox or take other necessary actions
+                            RefreshComboBoxTableNames();
                         }
                         break;
                     case 2: // Edytuj kolumny
-                            // Kod obsługi edycji kolumn
+                        if (comboBoxTableNames.SelectedItem != null)
+                        {
+                            string selectedTableNameC2 = comboBoxTableNames.SelectedItem.ToString();
+
+                            EditColumnsDialog editColumnsDialog = new EditColumnsDialog(selectedTableNameC2);
+                            if (editColumnsDialog.ShowDialog() == DialogResult.OK)
+                            {
+                                List<string> columnNames = editColumnsDialog.ColumnNames;
+                                List<string> dataTypes = editColumnsDialog.DataTypes;
+                                List<bool> IsNotNullConstraints = editColumnsDialog.IsNotNullConstraints;
+                                List<bool> IsPrimaryKeyColumns = editColumnsDialog.IsPrimaryKeyColumns;
+                                List<bool> IsUniqueColumns = editColumnsDialog.IsUniqueColumns;
+
+                                using (DatabaseContext contextC2 = new DatabaseContext())
+                                {
+                                    contextC2.EditTable(databaseList, selectedTableNameC2, columnNames, dataTypes, IsNotNullConstraints, IsPrimaryKeyColumns, IsUniqueColumns);
+                                    RefreshComboBoxTableNames();
+                                }
+
+                                dataGridRefresh();
+                            }
+                        }
+                        RefreshComboBoxTableNames();
                         break;
                     case 3: // Dodaj wiersz
                             // Kod obsługi dodawania wiersza
@@ -139,7 +164,7 @@ namespace DataBaseManagement.Views
                                 if (rowToDelete != null)
                                 {
                                     context.DeleteRow(rowToDelete);
-                                    // Update the ComboBox or take other necessary actions
+                                    RefreshComboBoxTableNames();
                                 }
                             }
                         }
@@ -166,7 +191,28 @@ namespace DataBaseManagement.Views
                 }
             }
         }
+        private void RefreshComboBoxTableNames()
+        {
+            comboBoxTableNames.Items.Clear();
 
+            using (SqlConnection connection = new SqlConnection($"Data Source=localhost;Initial Catalog=master;Integrated Security=True"))
+            {
+                connection.Open();
+                string sql = $"SELECT name FROM {databaseList}.sys.tables";
+                using (SqlCommand command = new SqlCommand(sql, connection))
+                {
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            string tableName = reader["name"].ToString();
+                            comboBoxTableNames.Items.Add(tableName);
+                        }
+                    }
+                }
+                connection.Close();
+            }
+        }
 
     }
 }
