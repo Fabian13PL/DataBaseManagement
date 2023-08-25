@@ -16,6 +16,7 @@ namespace DataBaseManagement.Views
         public AddTableDialog()
         {
             InitializeComponent();
+            this.ShowIcon = false;
             ColumnNames = new List<string>();
             DataTypes = new List<string>();
             IsNotNullConstraints = new List<bool>();

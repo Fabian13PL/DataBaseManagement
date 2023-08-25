@@ -116,7 +116,7 @@
             // 
             // CancelButton
             // 
-            this.CancelButton.Location = new System.Drawing.Point(434, 104);
+            this.CancelButton.Location = new System.Drawing.Point(434, 73);
             this.CancelButton.Name = "CancelButton";
             this.CancelButton.Size = new System.Drawing.Size(131, 23);
             this.CancelButton.TabIndex = 22;
@@ -126,7 +126,7 @@
             // 
             // OKButton
             // 
-            this.OKButton.Location = new System.Drawing.Point(434, 73);
+            this.OKButton.Location = new System.Drawing.Point(434, 102);
             this.OKButton.Name = "OKButton";
             this.OKButton.Size = new System.Drawing.Size(131, 23);
             this.OKButton.TabIndex = 21;
@@ -255,7 +255,7 @@
             this.Controls.Add(this.DataTypeComboBox);
             this.Controls.Add(this.ColumnNameTextBox);
             this.Name = "EditColumnsDialog";
-            this.Text = "EditColumnsDialog";
+            this.Text = "Edytuj kolumny tabeli";
             this.ResumeLayout(false);
             this.PerformLayout();
 

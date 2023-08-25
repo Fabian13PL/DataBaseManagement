@@ -15,13 +15,14 @@ namespace DataBaseManagement.Views
         public AddDataBase()
         {
             InitializeComponent();
+            this.ShowIcon = false;
         }
 
         private void buttonCreateDatabase_Click(object sender, EventArgs e)
         {
             string name = textBoxName.Text;
             string description = textBoxDescription.Text;
-            string serverName = textBoxServerName.Text;
+            string serverName = "localhost";
 
             DatabaseCreator databaseCreator = new DatabaseCreator();
             databaseCreator.CreateDatabase(name, description, serverName);

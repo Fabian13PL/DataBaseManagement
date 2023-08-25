@@ -15,6 +15,7 @@ namespace DataBaseManagement.Views
         public StartPage()
         {
             InitializeComponent();
+            this.ShowIcon = false;
         }
 
         private void DataBaseList_SelectedIndexChanged(object sender, EventArgs e)

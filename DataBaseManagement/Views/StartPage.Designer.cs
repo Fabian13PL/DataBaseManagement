@@ -36,7 +36,7 @@
             // 
             // ButtonAddDataBase
             // 
-            this.ButtonAddDataBase.Location = new System.Drawing.Point(416, 112);
+            this.ButtonAddDataBase.Location = new System.Drawing.Point(93, 42);
             this.ButtonAddDataBase.Name = "ButtonAddDataBase";
             this.ButtonAddDataBase.Size = new System.Drawing.Size(135, 23);
             this.ButtonAddDataBase.TabIndex = 0;
@@ -49,9 +49,9 @@
             this.DataBaseList.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.DataBaseList.FormattingEnabled = true;
             this.DataBaseList.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.DataBaseList.Location = new System.Drawing.Point(68, 83);
+            this.DataBaseList.Location = new System.Drawing.Point(12, 12);
             this.DataBaseList.Name = "DataBaseList";
-            this.DataBaseList.Size = new System.Drawing.Size(329, 24);
+            this.DataBaseList.Size = new System.Drawing.Size(328, 24);
             this.DataBaseList.TabIndex = 1;
             this.DataBaseList.SelectedIndexChanged += new System.EventHandler(this.DataBaseList_SelectedIndexChanged);
             this.DataBaseList.SelectedValueChanged += new System.EventHandler(this.DataBaseList_SelectedValueChanged);
@@ -59,9 +59,9 @@
             // 
             // ButtonSelectDataBase
             // 
-            this.ButtonSelectDataBase.Location = new System.Drawing.Point(416, 83);
+            this.ButtonSelectDataBase.Location = new System.Drawing.Point(234, 42);
             this.ButtonSelectDataBase.Name = "ButtonSelectDataBase";
-            this.ButtonSelectDataBase.Size = new System.Drawing.Size(135, 23);
+            this.ButtonSelectDataBase.Size = new System.Drawing.Size(106, 23);
             this.ButtonSelectDataBase.TabIndex = 2;
             this.ButtonSelectDataBase.Text = "Wybierz bazę danych";
             this.ButtonSelectDataBase.UseVisualStyleBackColor = true;
@@ -69,7 +69,7 @@
             // 
             // ButtonExit
             // 
-            this.ButtonExit.Location = new System.Drawing.Point(416, 141);
+            this.ButtonExit.Location = new System.Drawing.Point(12, 42);
             this.ButtonExit.Name = "ButtonExit";
             this.ButtonExit.Size = new System.Drawing.Size(75, 23);
             this.ButtonExit.TabIndex = 3;
@@ -81,13 +81,13 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(661, 179);
+            this.ClientSize = new System.Drawing.Size(368, 79);
             this.Controls.Add(this.ButtonExit);
             this.Controls.Add(this.ButtonSelectDataBase);
             this.Controls.Add(this.DataBaseList);
             this.Controls.Add(this.ButtonAddDataBase);
             this.Name = "StartPage";
-            this.Text = "StartPage";
+            this.Text = "Wybierz bazę danych";
             this.Load += new System.EventHandler(this.StartPage_Load);
             this.ResumeLayout(false);
 

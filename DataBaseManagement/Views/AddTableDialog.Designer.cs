@@ -134,7 +134,7 @@
             // 
             // OKButton
             // 
-            this.OKButton.Location = new System.Drawing.Point(435, 70);
+            this.OKButton.Location = new System.Drawing.Point(435, 99);
             this.OKButton.Name = "OKButton";
             this.OKButton.Size = new System.Drawing.Size(131, 23);
             this.OKButton.TabIndex = 6;
@@ -144,7 +144,7 @@
             // 
             // CancelButton
             // 
-            this.CancelButton.Location = new System.Drawing.Point(435, 101);
+            this.CancelButton.Location = new System.Drawing.Point(435, 70);
             this.CancelButton.Name = "CancelButton";
             this.CancelButton.Size = new System.Drawing.Size(131, 23);
             this.CancelButton.TabIndex = 7;
@@ -241,7 +241,7 @@
             this.Controls.Add(this.DataTypeComboBox);
             this.Controls.Add(this.ColumnNameTextBox);
             this.Name = "AddTableDialog";
-            this.Text = "AddTableDialog";
+            this.Text = "Dodaj tabelę";
             this.Load += new System.EventHandler(this.AddTableDialog_Load);
             this.ResumeLayout(false);
             this.PerformLayout();

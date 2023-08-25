@@ -5,12 +5,14 @@ using System.IO;
 using System.Linq;
 using System.Data.SqlClient;
 using System.Xml.Linq;
+using System.Windows.Forms;
+using System;
 
 namespace DataBaseManagement
 {
     public class DatabaseContext : DbContext
     {
-        public DatabaseContext() : base("DefaultConnection")
+        public DatabaseContext() : base("Data Source=localhost;Initial Catalog=master;Integrated Security=True")
         {
         }
 
@@ -20,37 +22,48 @@ namespace DataBaseManagement
 
         public List<Row> GetRows(Table table)
         {
-            return this.Tables.Find(table.Id).Rows.ToList();
+            return table.Rows.ToList();
         }
 
         public void ExportToCSV(Table table, string filePath)
         {
-            List<Row> rows = this.GetRows(table);
+            List<Row> rows = new List<Row>(); // Pobierz wiersze dla wybranej tabeli (np. table.Rows.ToList())
 
-            using (StreamWriter sw = new StreamWriter(filePath))
+            try
             {
-                // write column headers
-                string headers = string.Join(",", table.Columns.Select(c => c.ColumnName));
-                sw.WriteLine(headers);
-
-                // write row data
-                foreach (Row row in rows)
+                using (StreamWriter sw = new StreamWriter(filePath))
                 {
-                    List<string> rowData = new List<string>();
+                    // write column headers
+                    string headers = string.Join(";", table.Columns.Select(c => c.ColumnName));
+                    sw.WriteLine(headers);
 
-                    foreach (Cell cell in row.Cells)
+                    // write row data
+                    foreach (Row row in rows)
                     {
-                        rowData.Add(cell.Value);
-                    }
+                        List<string> rowData = new List<string>();
 
-                    sw.WriteLine(string.Join(",", rowData));
+                        foreach (Cell cell in row.Cells)
+                        {
+                            rowData.Add(cell.Value);
+                        }
+
+                        sw.WriteLine(string.Join(";", rowData));
+                    }
                 }
+
+                MessageBox.Show("Eksport do pliku CSV zakończony sukcesem.", "Sukces", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Wystąpił błąd podczas eksportu do pliku CSV: " + ex.Message, "Błąd", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
+
+
         public List<Row> FilterTable(Table table, string columnName, string filterValue)
         {
-            List<Row> rows = this.Tables.Find(table.Id).Rows.ToList();
+            List<Row> rows = table.Rows.ToList();
             List<Row> filteredRows = new List<Row>();
 
             foreach (Row row in rows)
@@ -66,8 +79,10 @@ namespace DataBaseManagement
             return filteredRows;
         }
 
-        public void AddRow(Table table, List<string> values)
+        public void AddRow(string databaseName, Table table, List<string> values)
         {
+            string sql = $"USE {databaseName} INSERT INTO {table.Name} (";
+
             Row row = new Row { Cells = new List<Cell>() };
 
             for (int i = 0; i < values.Count; i++)
@@ -82,16 +97,6 @@ namespace DataBaseManagement
             }
 
             table.Rows.Add(row);
-            this.SaveChanges();
-        }
-
-        public void EditRow(Row row, List<string> values)
-        {
-            for (int i = 0; i < values.Count; i++)
-            {
-                row.Cells.ToList()[i].Value = values[i];
-            }
-
             this.SaveChanges();
         }
 
@@ -143,48 +148,67 @@ namespace DataBaseManagement
 
             Table table = new Table
             {
-                Name = tableName
+                Name = tableName,
+                Columns = new List<Column>()  // Tworzymy nową listę kolumn
             };
 
-            //this.Tables.Add(table);
+            for (int i = 0; i < columnNames.Count; i++)
+            {
+                Column column = new Column
+                {
+                    ColumnName = columnNames[i],
+                    DataType = dataTypes[i],
+                    IsNotNull = IsNotNullConstraints[i],
+                    IsPrimaryKey = IsPrimaryKeyColumns[i],
+                    IsUnique = IsUniqueColumns[i]
+                };
+
+                table.Columns.Add(column);  // Dodajemy nową kolumnę do listy kolumn tabeli
+            }
+
+            this.Tables.Add(table);
             this.SaveChanges();
         }
 
         public void EditTable(string databaseName, string tableName, List<string> columnNames, List<string> dataTypes, List<bool> IsNotNullConstraints, List<bool> IsPrimaryKeyColumns, List<bool> IsUniqueColumns)
         {
-            string sql = $"USE {databaseName} ALTER TABLE {tableName} ";
-
-            for (int i = 0; i < columnNames.Count; i++)
+            using (SqlConnection connection = new SqlConnection($"Data Source=localhost;Initial Catalog={databaseName};Integrated Security=True"))
             {
-                sql += $"ALTER COLUMN {columnNames[i]} {dataTypes[i]}";
+                connection.Open();
 
-                if (IsNotNullConstraints[i])
+                for (int i = 0; i < columnNames.Count; i++)
                 {
-                    sql += " NOT NULL";
+                    string alterSql = $"USE {databaseName}; ALTER TABLE {tableName} ALTER COLUMN {columnNames[i]} {dataTypes[i]}";
+
+                    if (IsNotNullConstraints[i])
+                    {
+                        alterSql += " NOT NULL";
+                    }
+
+                    if (IsPrimaryKeyColumns[i])
+                    {
+                        alterSql += $" ADD PRIMARY KEY {columnNames[i]}";
+                    }
+
+                    if (IsUniqueColumns[i])
+                    {
+                        alterSql += " UNIQUE";
+                    }
+                    
+                    if (i < columnNames.Count - 1)
+                    {
+                        alterSql += ";";
+                    }
+
+                    using (SqlCommand command = new SqlCommand(alterSql, connection))
+                    {
+                        command.ExecuteNonQuery();
+                    }
                 }
 
-                if (IsPrimaryKeyColumns[i])
-                {
-                    sql += " PRIMARY KEY";
-                }
-
-                if (IsUniqueColumns[i])
-                {
-                    sql += " UNIQUE";
-                }
-
-                if (i < columnNames.Count - 1)
-                {
-                    sql += ",";
-                }
-
-                if (i < columnNames.Count - 1)
-                {
-                    sql += ",";
-                }
+                connection.Close();
             }
-
-            this.Database.ExecuteSqlCommand(sql);
         }
+
     }
 }

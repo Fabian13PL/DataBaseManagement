@@ -19,6 +19,7 @@ namespace DataBaseManagement.Views
         public ManageTablesDialog(String databaseList)
         {
             InitializeComponent();
+            this.ShowIcon = false;
             this.databaseList = databaseList; 
         }
 
@@ -149,28 +150,109 @@ namespace DataBaseManagement.Views
                         RefreshComboBoxTableNames();
                         break;
                     case 3: // Dodaj wiersz
-                            // Kod obsługi dodawania wiersza
-                        break;
-                    case 4: // Usuń wiersz
-                        if (dataGridView.SelectedRows.Count > 0)
+                        if (comboBoxTableNames.SelectedItem != null)
                         {
-                            DataGridViewRow selectedRow = dataGridView.SelectedRows[0];
-                            int rowId = Convert.ToInt32(selectedRow.Cells["Id"].Value);
+                            string selectedTableNameC3 = comboBoxTableNames.SelectedItem.ToString();
 
-                            Table selectedTableC4 = context.Tables.FirstOrDefault(t => t.Name == selectedTableName);
-                            if (selectedTableC4 != null)
+                            using (DatabaseContext contextC3 = new DatabaseContext())
                             {
-                                Row rowToDelete = selectedTableC4.Rows.FirstOrDefault(r => r.Id == rowId);
-                                if (rowToDelete != null)
+                                Table selectedTableC3 = context.Tables.FirstOrDefault(table => table.Name == selectedTableNameC3);
+                                if (selectedTableC3 != null)
                                 {
-                                    context.DeleteRow(rowToDelete);
-                                    RefreshComboBoxTableNames();
+                                    List<string> columnNames = selectedTableC3.Columns.Select(column => column.ColumnName).ToList();
+                                    AddRowDialog addRowDialog = new AddRowDialog(columnNames);
+
+                                    if (addRowDialog.ShowDialog() == DialogResult.OK)
+                                    {
+                                        try
+                                        {
+                                            using (SqlConnection connection = new SqlConnection("Data Source=localhost;Initial Catalog=master;Integrated Security=True"))
+                                            {
+                                                connection.Open();
+
+                                                string insertQuery = $"INSERT INTO {selectedTableC3.Name} ({string.Join(", ", columnNames)}) VALUES ({string.Join(", ", addRowDialog.RowValues.ConvertAll(value => $"@{value}"))})";
+
+                                                using (SqlCommand command = new SqlCommand(insertQuery, connection))
+                                                {
+                                                    for (int i = 0; i < columnNames.Count; i++)
+                                                    {
+                                                        command.Parameters.AddWithValue($"@{columnNames[i]}", addRowDialog.RowValues[i]);
+                                                    }
+
+                                                    int rowsAffected = command.ExecuteNonQuery();
+
+                                                    if (rowsAffected > 0)
+                                                    {
+                                                        MessageBox.Show("Wiersz został dodany.", "Sukces", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                                                        dataGridRefresh(); // Odświeżanie danych w interfejsie użytkownika
+                                                    }
+                                                    else
+                                                    {
+                                                        MessageBox.Show("Nie udało się dodać wiersza.", "Błąd", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        catch (Exception ex)
+                                        {
+                                            MessageBox.Show("Wystąpił błąd: " + ex.Message, "Błąd", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                        }
+                                    }
                                 }
                             }
                         }
                         break;
+                    case 4: // Usuń wiersz
+                        if (comboBoxTableNames.SelectedItem != null)
+                        {
+                            using (DatabaseContext contextC4 = new DatabaseContext())
+                            {
+                                string selectedTableNameC4 = comboBoxTableNames.SelectedItem.ToString();
+                                Table selectedTableC4 = contextC4.Tables.FirstOrDefault(table => table.Name == selectedTableNameC4);
 
+                                if (selectedTableC4 != null)
+                                {
+                                    DeleteRowDialog deleteRowDialog = new DeleteRowDialog(selectedTableC4);
+                                    if (deleteRowDialog.ShowDialog() == DialogResult.OK)
+                                    {
+                                        if (deleteRowDialog.ConfirmDelete)
+                                        {
+                                            try
+                                            {
+                                                using (SqlConnection connection = new SqlConnection("Data Source=localhost;Initial Catalog=master;Integrated Security=True"))
+                                                {
+                                                    connection.Open();
 
+                                                    string deleteQuery = $"DELETE FROM {selectedTableC4.Name} WHERE ID = @ID"; // Przyjmuję, że ID to nazwa kolumny identyfikującej wiersze
+
+                                                    using (SqlCommand command = new SqlCommand(deleteQuery, connection))
+                                                    {
+                                                        command.Parameters.AddWithValue("@ID", deleteRowDialog.SelectedRowID);
+
+                                                        int rowsAffected = command.ExecuteNonQuery();
+
+                                                        if (rowsAffected > 0)
+                                                        {
+                                                            MessageBox.Show("Wiersz został usunięty.", "Sukces", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                                                            dataGridRefresh(); // Odświeżanie danych w interfejsie użytkownika
+                                                        }
+                                                        else
+                                                        {
+                                                            MessageBox.Show("Nie udało się usunąć wiersza.", "Błąd", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                            catch (Exception ex)
+                                            {
+                                                MessageBox.Show("Wystąpił błąd: " + ex.Message, "Błąd", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        break;
                     case 5: // Eksportuj tabelę do CSV
                         Table selectedTable = context.Tables.FirstOrDefault(t => t.Name == selectedTableName);
                         if (selectedTable != null)

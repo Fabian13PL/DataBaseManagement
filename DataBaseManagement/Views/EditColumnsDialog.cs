@@ -16,6 +16,7 @@ namespace DataBaseManagement.Views
         public EditColumnsDialog(string selectedTableName)
         {
             InitializeComponent();
+            this.ShowIcon = false;
 
             ColumnNames = new List<string>();
             DataTypes = new List<string>();
@@ -27,12 +28,13 @@ namespace DataBaseManagement.Views
 
             using (var context = new DatabaseContext())
             {
-                var selectedTables = context.Tables.Where(t => t.Name == selectedTableName).ToList();
+                Table selectedTable = context.Tables
+                        .Where(t => t.Name == selectedTableName)
+                        .FirstOrDefault();
 
-                if (selectedTables.Any())
+
+                if (selectedTable != null)
                 {
-                    var selectedTable = selectedTables.First();
-
                     foreach (var column in selectedTable.Columns)
                     {
                         ColumnNames.Add(column.ColumnName);
